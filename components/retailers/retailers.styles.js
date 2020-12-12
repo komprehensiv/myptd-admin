@@ -23,6 +23,7 @@ export const TextFieldWrapper = styled.div`
         line-height: 1.5 !important;
         transform: translate(0, 1.5px) scale(0.75) !important;
         transform-origin: top left !important;
+        width: max-content;
     }
     & .MuiInputBase-root {
         margin-top: 24px !important;
@@ -66,4 +67,6 @@ export const NextButton = styled(Button)`
     padding: 8px 24px !important;
     min-width: 112px !important;
     min-height: 40px !important;
+    margin-left: ${({ noMargin }) => (noMargin ? '0' : '5px !important')};
+    margin-right: ${({ noMargin }) => (noMargin ? '0' : '5px !important')};
 `;
