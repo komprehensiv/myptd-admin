@@ -2,9 +2,10 @@ import { thunk, action } from 'easy-peasy';
 import getConfig from 'next/config';
 import find from 'lodash/find';
 
-const { publicRuntimeConfig: { RETAILERS_ENDPOINT, UPDATE_RETAILER_ENDPOINT, CREATE_RETAILER_ENDPOINT }} = getConfig();
+const { publicRuntimeConfig: { RETAILERS_ENDPOINT, UPDATE_RETAILER_ENDPOINT, CREATE_RETAILER_ENDPOINT, DELETE_RETAILER_ENDPOINT }} = getConfig();
 const getEmptyRetailer = () => {
   return {
+    name: '',
     deliverySurcharge: '',
     deliveryPieceSurcharge: '',
     longDistanceDeliverySurcharge: '',
@@ -30,6 +31,9 @@ const retailerModel = {
   resetRetailer: action((state, payload) => {
     state.retailer = payload.isUpdate ? find(state.retailers, { id: state.retailer.id }) : getEmptyRetailer() ;
   }),
+  clearRetailer: action((state, payload) => {
+    state.retailer = { id: null, ...getEmptyRetailer() };
+  }),
   updateRetailer: action((state, payload) => {
     const { key, value } = payload;
     state.retailer[key] = value;
@@ -39,13 +43,29 @@ const retailerModel = {
     const { retailer } = getState();
     const body = JSON.stringify({ ...retailer });
     const endpoint = isUpdate ? UPDATE_RETAILER_ENDPOINT : CREATE_RETAILER_ENDPOINT;
-    debugger;
+
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body
     });
     const { message, data } = await response.json();
+    actions.fetchRetailers();
+    actions.clearRetailer();
+    actions.setUpdateSuccessfulStatus(true);
+  }),
+  deleteRetailer: thunk(async (actions, payload) => {
+    const body = JSON.stringify({ id: payload });
+    const endpoint = DELETE_RETAILER_ENDPOINT;
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body
+    });
+    const { message, data } = await response.json();
+    actions.fetchRetailers();
+    actions.clearRetailer();
     actions.setUpdateSuccessfulStatus(true);
   }),
   setUpdateSuccessfulStatus: action((state, payload) => {

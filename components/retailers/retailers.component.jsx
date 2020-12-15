@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 const Retailers = () => {
     const { editType } = useStoreState(({ edit }) => edit);
     const { retailer, retailers, updateSuccessful } = useStoreState(({ retailers }) => retailers);
-    const { fetchRetailers, updateRetailer, resetRetailer, updateSelectedRetailer, saveRetailer, setUpdateSuccessfulStatus } = useStoreActions(({ retailers }) => retailers);
+    const { fetchRetailers, updateRetailer, resetRetailer, updateSelectedRetailer, saveRetailer, setUpdateSuccessfulStatus, deleteRetailer, clearRetailer } = useStoreActions(({ retailers }) => retailers);
     
     useEffect(() => {
         fetchRetailers();
@@ -19,6 +19,7 @@ const Retailers = () => {
     
     if (updateSuccessful !== null) {
         if (updateSuccessful) {
+            setUpdateSuccessfulStatus(null);
             toast.success('Save Complete!', {
                 position: "bottom-left",
                 autoClose: 3000,
@@ -28,9 +29,6 @@ const Retailers = () => {
                 draggable: true
             });
         }
-        setTimeout(() => {
-            setUpdateSuccessfulStatus(null);
-        }, 3000);
     }
 
     const updateRetailerCharges = () => {
@@ -61,6 +59,7 @@ const Retailers = () => {
                                     <TextField 
                                         label="Retailer" 
                                         onChange={() => setSelectedRetailer({ value: event.srcElement.dataset.value })}
+                                        value={retailer.id || ''}
                                         fullWidth
                                         select>
                                         {
@@ -154,12 +153,31 @@ const Retailers = () => {
                             spacing={0}> 
                             <Grid item xs={ 12 }>
                                 <NextButtonWrapper>
+                                    {
+                                        editType === 'update' &&
+                                        <NextButton
+                                            color="secondary" 
+                                            size="large"
+                                            disabled={isFalsy(retailer.name)}
+                                            onClick={ () => deleteRetailer(retailer.id) }>
+                                            Delete
+                                        </NextButton>
+                                    }
                                     <NextButton
-                                        color="info" 
+                                        color="primary" 
                                         size="large"
-                                        onClick={ () => resetRetailer() }>
-                                        Reset
+                                        onClick={ () => clearRetailer() }>
+                                        Clear
                                     </NextButton>
+                                    {
+                                        editType === 'update' &&
+                                        <NextButton
+                                            color="primary" 
+                                            size="large"
+                                            onClick={ () => resetRetailer({isUpdate: editType === 'update'}) }>
+                                            Reset
+                                        </NextButton>
+                                    }
                                     <NextButton
                                         color="primary" 
                                         size="large"

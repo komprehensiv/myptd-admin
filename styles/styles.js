@@ -9,7 +9,8 @@ export const colors = {
     success: '#51AF33',
     headerText: '#545E69',
     buttonGray: '#e0e0e0',
-    buttonPrimary: '#1976d2',
+    primary: '#1976d2',  // button primary
+    secondary: '#f50057',  // button secondary
     textGray: '#545e69',
     buttonTextBlack: 'rgba(0, 0, 0, 0.87)',
     buttonTextBlackDisabled: 'rgba(0, 0, 0, 0.26)',
