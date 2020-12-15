@@ -62,7 +62,7 @@ export const NextButtonWrapper = styled.div`
 `;
 
 export const NextButton = styled(Button)`
-    background-color: ${({ disabled }) => (disabled ? `${colors.offWhite} !important` : `${colors.buttonPrimary} !important}`)};
+    background-color: ${({ disabled, color }) => (disabled ? `${colors.offWhite} !important` : `${colors[color]} !important}`)};
     color: ${({ disabled }) => (disabled ? `${colors.buttonTextBlackDisabled} !important` : `${colors.white} !important}`)};
     padding: 8px 24px !important;
     min-width: 112px !important;

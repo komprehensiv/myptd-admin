@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 const Retailers = () => {
     const { editType } = useStoreState(({ edit }) => edit);
     const { retailer, retailers, updateSuccessful } = useStoreState(({ retailers }) => retailers);
-    const { fetchRetailers, updateRetailer, resetRetailer, updateSelectedRetailer, saveRetailer, setUpdateSuccessfulStatus } = useStoreActions(({ retailers }) => retailers);
+    const { fetchRetailers, updateRetailer, resetRetailer, updateSelectedRetailer, saveRetailer, setUpdateSuccessfulStatus, deleteRetailer, clearRetailer } = useStoreActions(({ retailers }) => retailers);
     
     useEffect(() => {
         fetchRetailers();
@@ -61,6 +61,7 @@ const Retailers = () => {
                                     <TextField 
                                         label="Retailer" 
                                         onChange={() => setSelectedRetailer({ value: event.srcElement.dataset.value })}
+                                        value={retailer.id || ''}
                                         fullWidth
                                         select>
                                         {
@@ -155,9 +156,22 @@ const Retailers = () => {
                             <Grid item xs={ 12 }>
                                 <NextButtonWrapper>
                                     <NextButton
-                                        color="info" 
+                                        color="secondary" 
                                         size="large"
-                                        onClick={ () => resetRetailer() }>
+                                        disabled={isFalsy(retailer.name)}
+                                        onClick={ () => deleteRetailer(retailer.id) }>
+                                        Delete
+                                    </NextButton>
+                                    <NextButton
+                                        color="primary" 
+                                        size="large"
+                                        onClick={ () => clearRetailer() }>
+                                        Clear
+                                    </NextButton>
+                                    <NextButton
+                                        color="primary" 
+                                        size="large"
+                                        onClick={ () => resetRetailer({isUpdate: editType === 'update'}) }>
                                         Reset
                                     </NextButton>
                                     <NextButton
