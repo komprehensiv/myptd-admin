@@ -2,7 +2,7 @@ import { thunk, action } from 'easy-peasy';
 import getConfig from 'next/config';
 import find from 'lodash/find';
 
-const { publicRuntimeConfig: { RETAILERS_ENDPOINT, UPDATE_RETAILER_ENDPOINT, CREATE_RETAILER_ENDPOINT }} = getConfig();
+const { publicRuntimeConfig: { RETAILERS_ENDPOINT, UPDATE_RETAILER_ENDPOINT, CREATE_RETAILER_ENDPOINT, DELETE_RETAILER_ENDPOINT }} = getConfig();
 const getEmptyRetailer = () => {
   return {
     name: '',
@@ -50,20 +50,22 @@ const retailerModel = {
       body
     });
     const { message, data } = await response.json();
+    actions.fetchRetailers();
+    actions.clearRetailer();
     actions.setUpdateSuccessfulStatus(true);
   }),
   deleteRetailer: thunk(async (actions, payload) => {
-    debugger;
     const body = JSON.stringify({ id: payload });
     const endpoint = DELETE_RETAILER_ENDPOINT;
 
-    // const response = await fetch(endpoint, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body
-    // });
-    // const { message, data } = await response.json();
-    Promise.resolve(true);
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body
+    });
+    const { message, data } = await response.json();
+    actions.fetchRetailers();
+    actions.clearRetailer();
     actions.setUpdateSuccessfulStatus(true);
   }),
   setUpdateSuccessfulStatus: action((state, payload) => {

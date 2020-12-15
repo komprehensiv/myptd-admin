@@ -19,6 +19,7 @@ const Retailers = () => {
     
     if (updateSuccessful !== null) {
         if (updateSuccessful) {
+            setUpdateSuccessfulStatus(null);
             toast.success('Save Complete!', {
                 position: "bottom-left",
                 autoClose: 3000,
@@ -28,9 +29,6 @@ const Retailers = () => {
                 draggable: true
             });
         }
-        setTimeout(() => {
-            setUpdateSuccessfulStatus(null);
-        }, 3000);
     }
 
     const updateRetailerCharges = () => {
@@ -155,25 +153,31 @@ const Retailers = () => {
                             spacing={0}> 
                             <Grid item xs={ 12 }>
                                 <NextButtonWrapper>
-                                    <NextButton
-                                        color="secondary" 
-                                        size="large"
-                                        disabled={isFalsy(retailer.name)}
-                                        onClick={ () => deleteRetailer(retailer.id) }>
-                                        Delete
-                                    </NextButton>
+                                    {
+                                        editType === 'update' &&
+                                        <NextButton
+                                            color="secondary" 
+                                            size="large"
+                                            disabled={isFalsy(retailer.name)}
+                                            onClick={ () => deleteRetailer(retailer.id) }>
+                                            Delete
+                                        </NextButton>
+                                    }
                                     <NextButton
                                         color="primary" 
                                         size="large"
                                         onClick={ () => clearRetailer() }>
                                         Clear
                                     </NextButton>
-                                    <NextButton
-                                        color="primary" 
-                                        size="large"
-                                        onClick={ () => resetRetailer({isUpdate: editType === 'update'}) }>
-                                        Reset
-                                    </NextButton>
+                                    {
+                                        editType === 'update' &&
+                                        <NextButton
+                                            color="primary" 
+                                            size="large"
+                                            onClick={ () => resetRetailer({isUpdate: editType === 'update'}) }>
+                                            Reset
+                                        </NextButton>
+                                    }
                                     <NextButton
                                         color="primary" 
                                         size="large"
