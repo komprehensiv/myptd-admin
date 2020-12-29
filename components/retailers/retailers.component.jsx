@@ -79,13 +79,13 @@ const Retailers = () => {
                             spacing={0}>
                             <Grid item xs={12} sm={6}>
                                 <TextFieldWrapper>
-                                <TextField
-                                    label='Retailer Name'
-                                    placeholder=''
-                                    onChange={() => updateRetailer({ key: 'name', value: event.target.value })}
-                                    fullWidth
-                                    value={retailer.name || ''}
-                                />
+                                    <TextField
+                                        label='Retailer Name'
+                                        placeholder=''
+                                        onChange={() => updateRetailer({ key: 'name', value: event.target.value })}
+                                        fullWidth
+                                        value={retailer.name || ''}
+                                    />
                                 </TextFieldWrapper>
                             </Grid>
                         </Grid>
