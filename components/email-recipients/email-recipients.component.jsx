@@ -6,15 +6,26 @@ import { NextButton, NextButtonWrapper, PaperInner, TextFieldWrapper } from "../
 import { InlineButtonWrapper } from "./email-recipients.styles";
 import { useState } from "react";
 import { toast } from 'react-toastify';
+import { checkAuthentication } from "../../lib/checkAuthentication";
 
 const EmailRecipients = () => {
     const { emailRecipients, updateSuccessful } = useStoreState(({ emailRecipients }) => emailRecipients);
     const { fetchEmailRecipients, addEmailRecipient, updateSelectedEmailRecipient, updateEmailRecipient, saveEmailRecipient, deleteEmailRecipient, setUpdateSuccessfulStatus } = useStoreActions(({ emailRecipients }) => emailRecipients);
     const [editing, setEditing] = useState(null);
+    const [authenticated, setAuthenticated] = useState(false);
     
     useEffect(() => {
-        fetchEmailRecipients();
+        const isAuthenticated = checkAuthentication();
+        setAuthenticated(isAuthenticated);
+        if(isAuthenticated) {
+            fetchEmailRecipients();
+        } else {
+            window.location.href = '/login';
+        }
     }, []);
+
+    // TODO: redirect to login screen
+    if (!authenticated) return null;
 
     if (isFalsy(emailRecipients)) return null;
 

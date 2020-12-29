@@ -12,6 +12,7 @@
     "@material-ui/lab": "4.0.0-alpha.56",
     "dotenv-webpack": "5.1.0",
     "easy-peasy": "4.0.1",
+    "jwt-decode": "^3.1.2",
     "next": "10.0.3",
     "react": "17.0.1",
     "react-dom": "17.0.1",
