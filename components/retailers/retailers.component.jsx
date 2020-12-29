@@ -1,19 +1,30 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useStoreState, useStoreActions } from 'easy-peasy'
 import { Grid, TextField, Paper, MenuItem } from "@material-ui/core";
 import { NextButtonWrapper, PaperInner, TextFieldWrapper, NextButton } from "./retailers.styles";
 import { isFalsy } from '../../lib/is-falsy';
 import find from 'lodash/find';
 import { toast } from 'react-toastify';
+import { checkAuthentication } from "../../lib/checkAuthentication";
 
 const Retailers = () => {
     const { editType } = useStoreState(({ edit }) => edit);
     const { retailer, retailers, updateSuccessful } = useStoreState(({ retailers }) => retailers);
     const { fetchRetailers, updateRetailer, resetRetailer, updateSelectedRetailer, saveRetailer, setUpdateSuccessfulStatus, deleteRetailer, clearRetailer } = useStoreActions(({ retailers }) => retailers);
+    const [authenticated, setAuthenticated] = useState(false);
     
     useEffect(() => {
-        fetchRetailers();
+        const isAuthenticated = checkAuthentication();
+        setAuthenticated(isAuthenticated);
+        if(isAuthenticated) {
+            fetchRetailers();
+        } else {
+            window.location.href = '/login';
+        }
     }, []);
+
+    // TODO: redirect to login screen
+    if (!authenticated) return null;
 
     if (isFalsy(retailers)) return null;
     
